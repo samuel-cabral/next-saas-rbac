@@ -17,6 +17,16 @@ export async function createAccount(app: FastifyInstance) {
           email: z.string().email(),
           password: z.string().min(6),
         }),
+        response: {
+          201: z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            email: z.string().email(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
@@ -57,7 +67,7 @@ export async function createAccount(app: FastifyInstance) {
 
       return reply.status(201).send({
         id: user.id,
-        name: user.name,
+        name: user.name!,
         email: user.email,
       })
     },
